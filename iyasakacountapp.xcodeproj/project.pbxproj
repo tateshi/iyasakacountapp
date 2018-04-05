@@ -13,6 +13,7 @@
 		572C83E820760253002CF245 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 572C83E720760253002CF245 /* Assets.xcassets */; };
 		572C83EB20760253002CF245 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 572C83E920760253002CF245 /* LaunchScreen.storyboard */; };
 		572C83F32076BB20002CF245 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572C83F22076BB1F002CF245 /* SecondViewController.swift */; };
+		572C83F72076C1EA002CF245 /* ThirdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572C83F62076C1EA002CF245 /* ThirdViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		572C83EA20760253002CF245 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		572C83EC20760253002CF245 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		572C83F22076BB1F002CF245 /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
+		572C83F62076C1EA002CF245 /* ThirdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 			children = (
 				572C83E020760252002CF245 /* AppDelegate.swift */,
 				572C83E220760252002CF245 /* ViewController.swift */,
+				572C83F62076C1EA002CF245 /* ThirdViewController.swift */,
 				572C83F22076BB1F002CF245 /* SecondViewController.swift */,
 				572C83E420760252002CF245 /* Main.storyboard */,
 				572C83E720760253002CF245 /* Assets.xcassets */,
@@ -140,6 +143,7 @@
 			files = (
 				572C83F32076BB20002CF245 /* SecondViewController.swift in Sources */,
 				572C83E320760252002CF245 /* ViewController.swift in Sources */,
+				572C83F72076C1EA002CF245 /* ThirdViewController.swift in Sources */,
 				572C83E120760252002CF245 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
