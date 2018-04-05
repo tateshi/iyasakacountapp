@@ -231,10 +231,10 @@
             </objects>
             <point key="canvasLocation" x="136.23188405797103" y="132.06521739130434"/>
         </scene>
-        <!--View Controller-->
+        <!--Second View Controller-->
         <scene sceneID="S7H-ep-uwV">
             <objects>
-                <viewController id="KFT-M6-m3s" sceneMemberID="viewController">
+                <viewController id="KFT-M6-m3s" customClass="SecondViewController" customModule="iyasakacountapp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="qaA-SO-BLT">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -245,6 +245,21 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="o67-nK-0G4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="861" y="137"/>
+        </scene>
+        <!--Third View Controller-->
+        <scene sceneID="xkB-nr-MYK">
+            <objects>
+                <viewController id="Cga-8y-rvh" customClass="ThirdViewController" customModule="iyasakacountapp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8vN-aO-DCt">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="5WX-CV-SSZ"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="u7W-bE-Qaf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1541" y="137"/>
         </scene>
     </scenes>
 </document>
