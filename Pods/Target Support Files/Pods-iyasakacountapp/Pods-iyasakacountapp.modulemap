@@ -1,0 +1,6 @@
+framework module Pods_iyasakacountapp {
+  umbrella header "Pods-iyasakacountapp-umbrella.h"
+
+  export *
+  module * { export * }
+}

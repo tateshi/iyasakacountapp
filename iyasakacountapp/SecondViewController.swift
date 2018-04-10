@@ -10,6 +10,13 @@ import UIKit
 
 class SecondViewController: UIViewController {
 
+    //数値の引き継ぎ
+    var chartMale: [Double] = []
+    var chartFemale: [Double] = []
+    var chartAge: [[Double]] = [[]]
+    
+    @IBOutlet weak var test: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
