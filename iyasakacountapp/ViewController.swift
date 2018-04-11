@@ -26,6 +26,9 @@ class ViewController: UIViewController {
     var setFemale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     //年齢構成
     var setAge = [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]]
+    
+    //v1.1 アラート
+    var alert:UIAlertController!
 
 
 //IB
@@ -41,9 +44,13 @@ class ViewController: UIViewController {
     //時間帯表示
     @IBOutlet weak var timezone: UILabel!
 
-    //時間変更・リセットボタン
+    //リセットボタン
     @IBOutlet weak var button: UIButton!
     @IBAction func reset(_ sender: Any) {
+        //アラートコントローラーを表示する。
+        self.present(alert, animated: true, completion:nil)
+ 
+/*　ver 1.0 時間遷移ボタン
         let tappedButton:UIButton = sender as! UIButton
         if time == 3{
             //23-25のときボタンのUIをリセットに変更
@@ -64,12 +71,15 @@ class ViewController: UIViewController {
             tappedButton.setTitleColor(UIColor.black, for: .normal)
         
         }else{
+
             //時間帯の変更処理
             time += 1
             unitsMale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
             unitsFemale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
             timezone.text = String(time * 2 + 15) + "-" + String(time * 2 + 17)
+
         }
+*/
     }
 
 
@@ -142,16 +152,80 @@ class ViewController: UIViewController {
             setAge[time][i] = unitsMale[i] + unitsFemale[i]
         }
     }
+    
+    //v1.1 時間取得
+    func getNowTime()-> String {
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "HH"
+        return timeFormatter.string(from: Date())
+    }
+   
+    //v1.1 時間帯の自動遷移
+    @objc func update() {
+        // 現在時刻を取得
+        let nowTime = Int(getNowTime())
+        if nowTime! >= time * 2 + 17{
+            time += 1
+            unitsMale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+            unitsFemale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+            timezone.text = String(time * 2 + 15) + "-" + String(time * 2 + 17)
+        }else{
+        }
+ 
+    }
+    
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        //日付表示
+    //日付表示
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ja_JP")
         dateFormatter.dateFormat = "M月dd日 EEE曜日"
         date.text = dateFormatter.string(from: Date())
+        
+        
+    //v1.1 60秒ごとにupdate()を呼び出す
+        _ = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(self.update), userInfo: nil, repeats: true)
+
+    //v1.1 リセットボタン表示
+        button.setTitle("リセット", for: .normal)
+        button.setTitleColor(UIColor.red, for: .normal)
+        
+    //v1.1 アラートコントローラーを作成する。
+        alert = UIAlertController(title: "確認", message: "全てのデータが消去されます。", preferredStyle: UIAlertControllerStyle.alert)
+        
+        //「続けるボタン」のアラートアクションを作成する。
+        let alertAction = UIAlertAction(
+            title: "リセット",
+            style: UIAlertActionStyle.default,
+            handler: { action in
+                //リセット処理
+                self.time = 0
+                self.totalCount = 0
+                self.total.text = String(self.totalCount)
+                self.unitsMale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+                self.unitsFemale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+                self.setMale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+                self.setFemale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+                self.setAge = [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]]
+                self.timezone.text = "15-17"
+
+        })
+        
+        
+        //「キャンセルボタン」のアラートアクションを作成する。
+        let alertAction2 = UIAlertAction(
+            title: "キャンセル",
+            style: UIAlertActionStyle.cancel,
+            handler: nil
+        )
+        //アラートアクションを追加する。
+        alert.addAction(alertAction)
+        alert.addAction(alertAction2)
+        
     }
+
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -171,5 +245,7 @@ class ViewController: UIViewController {
     }
 
 }
+
+
 
 
