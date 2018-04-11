@@ -9,64 +9,70 @@
 import UIKit
 
 class ViewController: UIViewController {
-    //戻る遷移のための設定
-    @IBAction func returnToTop(segue: UIStoryboardSegue) {}
 
-    //時間帯
+//変数の定義
+    //時間帯（0:15-17 1:17-19 2:19-21 3:21-23 4:23-25）
     var time = 0
+    //合計人数
+    var totalCount = 0
+    
     //集計用の配列
     var unitsMale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     var unitsFemale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     
-    //チャートに使用する配列
-    var chartMale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-    var chartFemale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-    var chartAge = [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]]
+    //チャート用の配列
+    //性別
+    var setMale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    var setFemale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    //年齢構成
+    var setAge = [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]]
 
+
+//IB
+    //戻る遷移のための設定
+    @IBAction func returnToTop(segue: UIStoryboardSegue) {}
+
+    //日付表示
+    @IBOutlet weak var date: UILabel!
     
     //合計人数表示
     @IBOutlet weak var total: UILabel!
-    
-    var totalCount = 0
-    func updateCounter() {
-    //合計人数カウンター
-        totalCount += 1
-        total.text = String(totalCount)
-        
-    //チャート用の配列に移す
-        //性別
-        let plus = { (a: Double, b: Double) -> Double in a + b }
-        chartMale[time] = unitsMale.reduce(0.0, plus)
-        chartFemale[time] = unitsFemale.reduce(0.0, plus)
-        //年齢
-        for i in 0...5{
-            chartAge[time][i] = unitsMale[i] + unitsFemale[i]
-        }
-    }
 
-    
-/*
-    //時間帯の移行ボタン
-    @IBAction func timeshift(_ sender: Any) {
-        if time == 5{
+    //時間帯表示
+    @IBOutlet weak var timezone: UILabel!
+
+    //時間変更・リセットボタン
+    @IBOutlet weak var button: UIButton!
+    @IBAction func reset(_ sender: Any) {
+        let tappedButton:UIButton = sender as! UIButton
+        if time == 3{
+            //23-25のときボタンのUIをリセットに変更
+            tappedButton.setTitle("リセット", for: .normal)
+            tappedButton.setTitleColor(UIColor.red, for: .normal)
+        }
+        
+        if time == 4{
+            //リセット処理
+            time = 0
+            totalCount = 0
+            total.text = String(totalCount)
+            setMale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+            setFemale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+            setAge = [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]]
+            timezone.text = "15-17"
+            tappedButton.setTitle("時間変更", for: .normal)
+            tappedButton.setTitleColor(UIColor.black, for: .normal)
+        
         }else{
+            //時間帯の変更処理
             time += 1
             unitsMale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
             unitsFemale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+            timezone.text = String(time * 2 + 15) + "-" + String(time * 2 + 17)
         }
     }
-*/
 
-    //リセットボタン
-    @IBAction func reset(_ sender: Any) {
-        time = 0
-        totalCount = 0
-        total.text = String(totalCount)
-        chartMale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-        chartFemale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-        chartAge = [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]]
-    }
-    
+
     //プラスボタン
     @IBAction func maleSho(_ sender: Any) {
         unitsMale[0] += 1
@@ -118,29 +124,50 @@ class ViewController: UIViewController {
         updateCounter()
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+
+//function
+    //プラスボタン後の更新
+    func updateCounter() {
+        //合計人数カウンター
+        totalCount += 1
+        total.text = String(totalCount)
         
-        if segue.identifier == "goSecond" {
-            let graphVc = segue.destination as! SecondViewController
-            graphVc.chartMale = self.chartMale
-            graphVc.chartFemale = self.chartFemale
-            graphVc.chartAge = self.chartAge
-        }else {
+        //チャート用の配列に移す
+        //性別
+        let plus = { (a: Double, b: Double) -> Double in a + b }
+        setMale[time] = unitsMale.reduce(0.0, plus)
+        setFemale[time] = unitsFemale.reduce(0.0, plus)
+        //年齢
+        for i in 0...5{
+            setAge[time][i] = unitsMale[i] + unitsFemale[i]
         }
     }
-    
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        
-        
+        //日付表示
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        dateFormatter.dateFormat = "M月dd日 EEE曜日"
+        date.text = dateFormatter.string(from: Date())
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    //secondへの引き継ぎ
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-       
+        if segue.identifier == "goSecond" {
+            let secondVc = segue.destination as! SecondViewController
+            secondVc.setMale = self.setMale
+            secondVc.setFemale = self.setFemale
+            secondVc.setAge = self.setAge
+        }else {
+        }
     }
 
 }
