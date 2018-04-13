@@ -16,9 +16,6 @@ class SecondViewController: UIViewController {
     var setAge: [[Double]] = [[]]
 
     let time = ["15-17", "17-19", "19-21", "21-23", "23-25"]
-    lazy var unitsMale = setMale
-    lazy var unitsFemale = setFemale
-    
     
     //戻る遷移のための設定
     @IBAction func returnToSec(segue: UIStoryboardSegue) {}
@@ -29,31 +26,44 @@ class SecondViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        //chartSex.delegate = self
         chartSex.noDataText = "You need to provide data for the chart."
         chartSex.chartDescription?.text = "性別"
         
+    //x軸の設定
         let xaxis = chartSex.xAxis
+        //x軸のグリッドライン非表示
         xaxis.drawGridLinesEnabled = false
+        //x軸ラベルの位置
         xaxis.labelPosition = .bottom
+        //x軸のvalueをセット
         xaxis.valueFormatter = IndexAxisValueFormatter(values:self.time)
+        //x軸の粒度
         xaxis.granularity = 1
         
+    //y軸の設定
         let leftAxisFormatter = NumberFormatter()
         leftAxisFormatter.maximumFractionDigits = 1
-        
         let yaxis = chartSex.leftAxis
+        //上部の余白
         yaxis.spaceTop = 0.15
+        //y軸の最小値を固定
         yaxis.axisMinimum = 0
+        //y軸のグリッドライン表示
         yaxis.drawGridLinesEnabled = true
-        
+    
+    //その他の設定
+        //右側のラベル非表示
         chartSex.rightAxis.enabled = false
-        
+        //ピンチズーム無効
         chartSex.pinchZoomEnabled = false
+        //ダブルタップズーム無効
         chartSex.doubleTapToZoomEnabled = false
+        //ドラッグ無効
         chartSex.dragEnabled = false
+        //グラフの影無効
         chartSex.drawBarShadowEnabled = false
-        chartSex.drawBordersEnabled = true
+        //グラフの枠非表示
+        chartSex.drawBordersEnabled = false
         
         setChart()
         
@@ -69,19 +79,24 @@ class SecondViewController: UIViewController {
     
     func setChart() {
         chartSex.noDataText = "You need to provide data for the chart."
-        var dataEntries: [BarChartDataEntry] = []
         
+        //棒グラフのデータを入れる配列
+        var dataEntries: [BarChartDataEntry] = []
+        //配列にデータを入れるループ処理
         for i in 0...4 {
-            //stack barchart
-            let dataEntry = BarChartDataEntry(x: Double(i), yValues:  [self.unitsMale[i],self.unitsFemale[i]])
+            //stacked barchart
+            let dataEntry = BarChartDataEntry(x: Double(i), yValues:  [self.setMale[i],self.setFemale[i]])
             dataEntries.append(dataEntry)
         }
         
         let chartDataSet = BarChartDataSet(values: dataEntries, label: "")
-        chartDataSet.colors = [UIColor.blue,UIColor.red]
+        //整数にするためのフォーマッター
+        chartDataSet.valueFormatter = BarChartValueFormatter()
+        //チャートの配色・ラベル
+        chartDataSet.colors = [UIColor(red: 127/255, green: 255/255, blue: 255/255, alpha: 1),UIColor(red: 255/255, green: 163/255, blue: 255/255, alpha: 1)]
         chartDataSet.stackLabels = ["男", "女"]
         
-        
+    //グラフのUI
         let chartData = BarChartData(dataSet: chartDataSet)
         let groupSpace = 0.4
         let barSpace = 0.05
@@ -98,11 +113,8 @@ class SecondViewController: UIViewController {
         chartSex.xAxis.axisMaximum = Double(startYear) + gg * Double(groupCount)
         
         chartData.groupBars(fromX: Double(startYear), groupSpace: groupSpace, barSpace: barSpace)
-        //chartData.groupWidth(groupSpace: groupSpace, barSpace: barSpace)
         chartSex.notifyDataSetChanged()
-        
         chartSex.data = chartData
-        
         
         //background color
         chartSex.backgroundColor = UIColor.white
@@ -136,6 +148,18 @@ class SecondViewController: UIViewController {
 
 }
 
+//小数点表示を整数表示にする処理。バーの上部に表示される数字。
+class BarChartValueFormatter : NSObject, IValueFormatter {
+    
+    // This method is  called when a value (from labels inside the chart) is formatted before being drawn.
+    func stringForValue(_ value: Double,
+                        entry: ChartDataEntry,
+                        dataSetIndex: Int,
+                        viewPortHandler: ViewPortHandler?) -> String {
+        let digitWithoutFractionValues = String(format: "%.0f", value)
+        return digitWithoutFractionValues
+    }
+}
 
 
 
