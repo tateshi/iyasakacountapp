@@ -301,8 +301,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="MsD-6k-OR9"/>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="hGw-Am-PGL">
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="1.5" id="hGw-Am-PGL">
                     <connections>
                         <action selector="pressLabel:" destination="BYZ-38-t0r" id="hYD-yN-gsU"/>
                     </connections>
