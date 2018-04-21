@@ -13,18 +13,14 @@ class ViewController: UIViewController {
 
     
 //変数の定義
-    // UserDefaults のインスタンス
+    //v2.0 UserDefaults のインスタンス
     let userDefaults = UserDefaults.standard
-    //保存用の日付フォーマット
+    //v2.0 保存用の日付フォーマット
     var dateLabel = ""
     //時間帯（0:15-17 1:17-19 2:19-21 3:21-23 4:23-25）
     var time = 0
-    //合計人数
-    var totalCount = 0
-
     //集計用の配列
-    var unitsMale:[[Int]] = [[], [], [], [], []]
-    var unitsFemale:[[Int]] = [[], [], [], [], []]
+    var unitsSet:[[Int]] = [[], [], [], [], []]
     //チャート用の配列
     //性別
     var setMale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
@@ -48,11 +44,12 @@ class ViewController: UIViewController {
             // 時間帯ごとの人数表示
             updateTime()
             totalLabel.text = String(time * 2 + 15) + "-" + String(time * 2 + 17) + "時"
-            total.text = String(unitsMale[time].count + unitsFemale[time].count)
+            total.text = String(unitsSet[time].count)
+
         }else{
             // 合計人数
             totalLabel.text = "合計"
-            total.text = String(totalCount)
+            countTotal()
         }
     }
     
@@ -62,121 +59,109 @@ class ViewController: UIViewController {
     //合計人数表示
     @IBOutlet weak var total: UILabel!
 
-    //リセットボタン
-    @IBOutlet weak var button: UIButton!
+//リセットボタン
+    @IBOutlet weak var backButton: UIButton!
     //ロングプレスでリセット
     @IBAction func pressLabel(_ sender: UILongPressGestureRecognizer) {
-        //アラートコントローラーを表示する。
-        self.present(alert, animated: true, completion:nil)
+        //長押し開始
+        if(sender.state == UIGestureRecognizerState.began){
+            backButtonUI(str: "reset")
+        //長押し終了
+        } else if (sender.state == UIGestureRecognizerState.ended) {
+            //アラートコントローラーを表示する。
+            self.present(alert, animated: true, completion:nil)
+        }
     }
-    @IBAction func reset(_ sender: Any) {
-       
- 
+    //v2.0 シングルタップで戻る処理
+    @IBAction func tapLabel(_ sender: Any) {
+        if unitsSet[time].count > 0{
+            unitsSet[time].removeLast()
+            updateCounter()
+        }
     }
 
 
     //プラスボタン
     @IBAction func maleSho(_ sender: Any) {
-        updateTime()
-        unitsMale[time].append(0)
-        updateCounter()
+        plusTapped(int:0)
     }
     @IBAction func maleChu(_ sender: Any) {
-        updateTime()
-        unitsMale[time].append(1)
-        updateCounter()
+        plusTapped(int: 1)
     }
     @IBAction func male16(_ sender: Any) {
-        updateTime()
-        unitsMale[time].append(2)
-        updateCounter()
+        plusTapped(int: 2)
     }
     @IBAction func male25(_ sender: Any) {
-        updateTime()
-        unitsMale[time].append(3)
-        updateCounter()
+        plusTapped(int: 3)
     }
     @IBAction func male40(_ sender: Any) {
-        updateTime()
-        unitsMale[time].append(4)
-        updateCounter()
+        plusTapped(int: 4)
     }
     @IBAction func male60(_ sender: Any) {
-        updateTime()
-        unitsMale[time].append(5)
-        updateCounter()
+        plusTapped(int: 5)
     }
     
     @IBAction func femaleSho(_ sender: Any) {
-        updateTime()
-        unitsFemale[time].append(0)
-        updateCounter()
+        plusTapped(int: 10)
     }
     @IBAction func femaleChu(_ sender: Any) {
-        updateTime()
-        unitsFemale[time].append(1)
-        updateCounter()
+        plusTapped(int: 11)
     }
     @IBAction func female16(_ sender: Any) {
-        updateTime()
-        unitsFemale[time].append(2)
-        updateCounter()
+        plusTapped(int: 12)
     }
     @IBAction func female25(_ sender: Any) {
-        updateTime()
-        unitsFemale[time].append(3)
-        updateCounter()
+        plusTapped(int: 13)
     }
     @IBAction func female40(_ sender: Any) {
-        updateTime()
-        unitsFemale[time].append(4)
-        updateCounter()
+        plusTapped(int: 14)
     }
     @IBAction func female60(_ sender: Any) {
-        updateTime()
-        unitsFemale[time].append(5)
-        updateCounter()
+        plusTapped(int: 15)
     }
     
 
 //function
-
-    //プラスボタン後の更新
-    func updateCounter() {
-        //v1.2 バイブレーションを鳴らす
+    
+    //v2.0 プラスボタンの一括処理
+    func plusTapped(int:Int){
         shortVibrate()
+        updateTime()
+        unitsSet[time].append(int)
+        updateCounter()
+    }
+
+    //カウンターの更新
+    func updateCounter() {
         //合計人数カウンター
-        totalCount += 1
-        total.text = String(totalCount)
+        countTotal()
         //チャート用の配列に移す
         setChart()
         // v2.0 データの保存
-        save()
+        userDefaults.set(unitsSet, forKey: dateLabel + "unitsSet")
+    }
+    
+    //v2.0 合計人数の計算（戻るに対応）
+    func countTotal(){
+        var n = 0
+        for time in 0...4{
+            n += unitsSet[time].count
+        }
+        total.text = String(n)
     }
     
     func setChart(){
         //性別(配列の長さ)
         for time in 0...4{
-            setMale[time] = Double(unitsMale[time].count)
-            setFemale[time] = Double(unitsFemale[time].count)
-        //年齢(特定の数字を数える）
+            setMale[time] = Double(unitsSet[time].filter{$0 < 10}.count)
+            setFemale[time] = Double(unitsSet[time].filter{$0 >= 10}.count)
+        //年齢(10の剰余で数える）
             for i in 0...5{
-                setAge[time][i] = Double(unitsMale[time].filter{$0 == i}.count + unitsFemale[time].filter{$0 == i}.count)
+                setAge[time][i] = Double(unitsSet[time].filter{$0 % 10 == i}.count)
             }
         }
     }
     
-    //v2.0 データの保持
-    func save(){
-        userDefaults.set(totalCount, forKey: "totalCount")
-        userDefaults.set(unitsMale, forKey: "unitsMale")
-        userDefaults.set(unitsFemale, forKey: "unitsFemale")
-        userDefaults.set(setMale, forKey: dateLabel + "setMale")
-        userDefaults.set(setFemale, forKey: dateLabel + "setFemale")
-        userDefaults.set(setAge, forKey: dateLabel + "setAge")
-    }
-    
-
     
     //日付取得
     func getNowDate(){
@@ -188,7 +173,7 @@ class ViewController: UIViewController {
         dateFormatter.locale = Locale(identifier: "ja_JP")
         
         let nowTime = Int(getNowTime())
-        //v2.0 5時までは前日の日付を使用
+        //v2.0 5時台までは前日の日付を使用
         if nowTime! <= 5 {
             //ヘッダー表示用
             dateFormatter.dateFormat = "M月dd日 EEE曜日"
@@ -216,9 +201,10 @@ class ViewController: UIViewController {
     func updateTime() {
         // 現在時刻を取得
         let nowTime = Int(getNowTime())
-        if nowTime! <= 1 {
+        if nowTime! <= 5 {
             time = 4
         }else{
+            time = 0
             while nowTime! >= time * 2 + 17{
                 time += 1
             }
@@ -226,7 +212,7 @@ class ViewController: UIViewController {
     }
 
     // 一日のリセット処理
-    @objc func update() {
+    @objc func autoReset() {
         // 現在時刻を取得
         let nowTime = Int(getNowTime())
         //5時台にリセット
@@ -238,14 +224,12 @@ class ViewController: UIViewController {
    
     //一日のリセット
     func reset(){
-        time = 0
-        totalCount = 0
-        unitsMale = [[], [], [], [], []]
-        unitsFemale = [[], [], [], [], []]
+        unitsSet = [[], [], [], [], []]
         getNowDate()
+        updateTime()
         setChart()
-        save()
-        total.text = String(totalCount)
+        countTotal()
+        userDefaults.set(unitsSet, forKey: dateLabel + "unitsSet")
     }
     
     //v1.2 タップ音（バイブレーション）
@@ -254,8 +238,21 @@ class ViewController: UIViewController {
         AudioServicesDisposeSystemSoundID(1003);
     }
     
+    //v2.0 戻るボタンのUI
+    func backButtonUI(str:String) {
+        if str == "back"{
+            backButton.setTitle("戻す", for: .normal)
+            backButton.setTitleColor(UIColor.black, for: .normal)
+        }else if str == "reset"{
+            backButton.setTitle("リセット", for: .normal)
+            backButton.setTitleColor(UIColor.red, for: .normal)
+            
+        }
+    }
+    
 
-
+    
+// 起動時の処理
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -263,25 +260,18 @@ class ViewController: UIViewController {
         getNowDate()
 
     // v2.0 当日データのロード
-        if UserDefaults.standard.object(forKey: "totalCount") != nil {
-            totalCount = userDefaults.object(forKey: "totalCount") as! Int
-            unitsMale = userDefaults.object(forKey: "unitsMale") as! [[Int]]
-            unitsFemale = userDefaults.object(forKey: "unitsFemale") as! [[Int]]
-            setMale = userDefaults.object(forKey: dateLabel + "setMale") as! [Double]
-            setFemale = userDefaults.object(forKey: dateLabel + "setFemale") as! [Double]
-            setAge = userDefaults.object(forKey: dateLabel + "setAge") as! [[Double]]
+        if UserDefaults.standard.object(forKey: dateLabel + "unitsSet") != nil {
+            unitsSet = userDefaults.object(forKey: dateLabel + "unitsSet") as! [[Int]]
         }else{
         }
-
-    //合計人数表示
-        total.text = String(totalCount)
+    
+    // カウンターの更新
+        updateCounter()
         
-    //v2.0 3600秒ごとにupdate()を呼び出す
-        _ = Timer.scheduledTimer(timeInterval: 3600, target: self, selector: #selector(self.update), userInfo: nil, repeats: true)
+    //v2.0 3600秒ごとにautoReset()を呼び出す
+        _ = Timer.scheduledTimer(timeInterval: 3600, target: self, selector: #selector(self.autoReset), userInfo: nil, repeats: true)
         
     //v1.1 リセットボタン
-        button.setTitle("リセット", for: .normal)
-        button.setTitleColor(UIColor.red, for: .normal)
         //v1.1 アラートコントローラーを作成する。
         alert = UIAlertController(title: "確認", message: "当日分のデータが消去されます。", preferredStyle: UIAlertControllerStyle.alert)
         //「続けるボタン」のアラートアクションを作成する。
@@ -291,12 +281,15 @@ class ViewController: UIViewController {
             handler: { action in
                 //リセット処理
                 self.reset()
+                self.backButtonUI(str:"back")
         })
         //「キャンセルボタン」のアラートアクションを作成する。
         let alertAction2 = UIAlertAction(
             title: "キャンセル",
             style: UIAlertActionStyle.cancel,
-            handler: nil
+            handler: { action in
+                self.backButtonUI(str:"back")
+        }
         )
         //アラートアクションを追加する。
         alert.addAction(alertAction)
