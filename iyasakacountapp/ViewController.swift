@@ -7,26 +7,30 @@
 //
 
 import UIKit
+import AudioToolbox
 
 class ViewController: UIViewController {
 
+    
 //変数の定義
+    // UserDefaults のインスタンス
+    let userDefaults = UserDefaults.standard
+    //保存用の日付フォーマット
+    var dateLabel = ""
     //時間帯（0:15-17 1:17-19 2:19-21 3:21-23 4:23-25）
     var time = 0
     //合計人数
     var totalCount = 0
-    
+
     //集計用の配列
-    var unitsMale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-    var unitsFemale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-    
+    var unitsMale:[[Int]] = [[], [], [], [], []]
+    var unitsFemale:[[Int]] = [[], [], [], [], []]
     //チャート用の配列
     //性別
     var setMale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     var setFemale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     //年齢構成
     var setAge = [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]]
-    
     //v1.1 アラート
     var alert:UIAlertController!
 
@@ -38,182 +42,256 @@ class ViewController: UIViewController {
     //日付表示
     @IBOutlet weak var date: UILabel!
     
+    // v1.2 合計・時間帯計切り替え
+    @IBAction func counterSwitch(_ sender: Any) {
+        if totalLabel.text == "合計"{
+            // 時間帯ごとの人数表示
+            updateTime()
+            totalLabel.text = String(time * 2 + 15) + "-" + String(time * 2 + 17) + "時"
+            total.text = String(unitsMale[time].count + unitsFemale[time].count)
+        }else{
+            // 合計人数
+            totalLabel.text = "合計"
+            total.text = String(totalCount)
+        }
+    }
+    
+    // v1.2 合計表示ラベル
+    @IBOutlet weak var totalLabel: UILabel!
+    
     //合計人数表示
     @IBOutlet weak var total: UILabel!
 
-    //時間帯表示
-    @IBOutlet weak var timezone: UILabel!
-
     //リセットボタン
     @IBOutlet weak var button: UIButton!
-    @IBAction func reset(_ sender: Any) {
+    //ロングプレスでリセット
+    @IBAction func pressLabel(_ sender: UILongPressGestureRecognizer) {
         //アラートコントローラーを表示する。
         self.present(alert, animated: true, completion:nil)
+    }
+    @IBAction func reset(_ sender: Any) {
+       
  
-/*　ver 1.0 時間遷移ボタン
-        let tappedButton:UIButton = sender as! UIButton
-        if time == 3{
-            //23-25のときボタンのUIをリセットに変更
-            tappedButton.setTitle("リセット", for: .normal)
-            tappedButton.setTitleColor(UIColor.red, for: .normal)
-        }
-        
-        if time == 4{
-            //リセット処理
-            time = 0
-            totalCount = 0
-            total.text = String(totalCount)
-            setMale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-            setFemale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-            setAge = [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]]
-            timezone.text = "15-17"
-            tappedButton.setTitle("時間変更", for: .normal)
-            tappedButton.setTitleColor(UIColor.black, for: .normal)
-        
-        }else{
-
-            //時間帯の変更処理
-            time += 1
-            unitsMale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-            unitsFemale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-            timezone.text = String(time * 2 + 15) + "-" + String(time * 2 + 17)
-
-        }
-*/
     }
 
 
     //プラスボタン
     @IBAction func maleSho(_ sender: Any) {
-        unitsMale[0] += 1
+        updateTime()
+        unitsMale[time].append(0)
         updateCounter()
     }
     @IBAction func maleChu(_ sender: Any) {
-        unitsMale[1] += 1
+        updateTime()
+        unitsMale[time].append(1)
         updateCounter()
     }
     @IBAction func male16(_ sender: Any) {
-        unitsMale[2] += 1
+        updateTime()
+        unitsMale[time].append(2)
         updateCounter()
     }
     @IBAction func male25(_ sender: Any) {
-        unitsMale[3] += 1
+        updateTime()
+        unitsMale[time].append(3)
         updateCounter()
     }
     @IBAction func male40(_ sender: Any) {
-        unitsMale[4] += 1
+        updateTime()
+        unitsMale[time].append(4)
         updateCounter()
     }
     @IBAction func male60(_ sender: Any) {
-        unitsMale[5] += 1
+        updateTime()
+        unitsMale[time].append(5)
         updateCounter()
     }
     
     @IBAction func femaleSho(_ sender: Any) {
-        unitsFemale[0] += 1
+        updateTime()
+        unitsFemale[time].append(0)
         updateCounter()
     }
     @IBAction func femaleChu(_ sender: Any) {
-        unitsFemale[1] += 1
+        updateTime()
+        unitsFemale[time].append(1)
         updateCounter()
     }
     @IBAction func female16(_ sender: Any) {
-        unitsFemale[2] += 1
+        updateTime()
+        unitsFemale[time].append(2)
         updateCounter()
     }
     @IBAction func female25(_ sender: Any) {
-        unitsFemale[3] += 1
+        updateTime()
+        unitsFemale[time].append(3)
         updateCounter()
     }
     @IBAction func female40(_ sender: Any) {
-        unitsFemale[4] += 1
+        updateTime()
+        unitsFemale[time].append(4)
         updateCounter()
     }
     @IBAction func female60(_ sender: Any) {
-        unitsFemale[5] += 1
+        updateTime()
+        unitsFemale[time].append(5)
         updateCounter()
     }
     
 
 //function
+
     //プラスボタン後の更新
     func updateCounter() {
+        //v1.2 バイブレーションを鳴らす
+        shortVibrate()
         //合計人数カウンター
         totalCount += 1
         total.text = String(totalCount)
-        
         //チャート用の配列に移す
-        //性別
-        let plus = { (a: Double, b: Double) -> Double in a + b }
-        setMale[time] = unitsMale.reduce(0.0, plus)
-        setFemale[time] = unitsFemale.reduce(0.0, plus)
-        //年齢
-        for i in 0...5{
-            setAge[time][i] = unitsMale[i] + unitsFemale[i]
+        setChart()
+        // v2.0 データの保存
+        save()
+    }
+    
+    func setChart(){
+        //性別(配列の長さ)
+        for time in 0...4{
+            setMale[time] = Double(unitsMale[time].count)
+            setFemale[time] = Double(unitsFemale[time].count)
+        //年齢(特定の数字を数える）
+            for i in 0...5{
+                setAge[time][i] = Double(unitsMale[time].filter{$0 == i}.count + unitsFemale[time].filter{$0 == i}.count)
+            }
         }
     }
     
+    //v2.0 データの保持
+    func save(){
+        userDefaults.set(totalCount, forKey: "totalCount")
+        userDefaults.set(unitsMale, forKey: "unitsMale")
+        userDefaults.set(unitsFemale, forKey: "unitsFemale")
+        userDefaults.set(setMale, forKey: dateLabel + "setMale")
+        userDefaults.set(setFemale, forKey: dateLabel + "setFemale")
+        userDefaults.set(setAge, forKey: dateLabel + "setAge")
+    }
+    
+
+    
+    //日付取得
+    func getNowDate(){
+        let calendar = Calendar(identifier: .gregorian)
+        let today = Date()
+        //昨日
+        let yesterday = calendar.date(byAdding: .day, value: -1, to: today)
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        
+        let nowTime = Int(getNowTime())
+        //v2.0 5時までは前日の日付を使用
+        if nowTime! <= 5 {
+            //ヘッダー表示用
+            dateFormatter.dateFormat = "M月dd日 EEE曜日"
+            date.text = dateFormatter.string(from: yesterday!)
+            //v2.0 保存ラベル用
+            dateFormatter.dateFormat = "yyyyMMdd"
+            dateLabel = dateFormatter.string(from: yesterday!)
+        }else{
+            dateFormatter.dateFormat = "M月dd日 EEE曜日"
+            date.text = dateFormatter.string(from: today)
+            dateFormatter.dateFormat = "yyyyMMdd"
+            dateLabel = dateFormatter.string(from: today)
+        }
+    }
+
     //v1.1 時間取得
     func getNowTime()-> String {
         let timeFormatter = DateFormatter()
+        timeFormatter.locale = Locale(identifier: "ja_JP")
         timeFormatter.dateFormat = "HH"
         return timeFormatter.string(from: Date())
     }
-   
-    //v1.1 時間帯の自動遷移
+    
+    //v1.1 時間帯の自動更新
+    func updateTime() {
+        // 現在時刻を取得
+        let nowTime = Int(getNowTime())
+        if nowTime! <= 1 {
+            time = 4
+        }else{
+            while nowTime! >= time * 2 + 17{
+                time += 1
+            }
+        }
+    }
+
+    // 一日のリセット処理
     @objc func update() {
         // 現在時刻を取得
         let nowTime = Int(getNowTime())
-        if nowTime! >= time * 2 + 17{
-            time += 1
-            unitsMale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-            unitsFemale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-            timezone.text = String(time * 2 + 15) + "-" + String(time * 2 + 17)
+        //5時台にリセット
+        if nowTime! == 5{
+            reset()
         }else{
         }
- 
+    }
+   
+    //一日のリセット
+    func reset(){
+        time = 0
+        totalCount = 0
+        unitsMale = [[], [], [], [], []]
+        unitsFemale = [[], [], [], [], []]
+        getNowDate()
+        setChart()
+        save()
+        total.text = String(totalCount)
+    }
+    
+    //v1.2 タップ音（バイブレーション）
+    func shortVibrate() {
+        AudioServicesPlaySystemSound(1003);
+        AudioServicesDisposeSystemSoundID(1003);
     }
     
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
-    //日付表示
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.dateFormat = "M月dd日 EEE曜日"
-        date.text = dateFormatter.string(from: Date())
         
-        
-    //v1.1 60秒ごとにupdate()を呼び出す
-        _ = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(self.update), userInfo: nil, repeats: true)
+    //日付取得
+        getNowDate()
 
-    //v1.1 リセットボタン表示
+    // v2.0 当日データのロード
+        if UserDefaults.standard.object(forKey: "totalCount") != nil {
+            totalCount = userDefaults.object(forKey: "totalCount") as! Int
+            unitsMale = userDefaults.object(forKey: "unitsMale") as! [[Int]]
+            unitsFemale = userDefaults.object(forKey: "unitsFemale") as! [[Int]]
+            setMale = userDefaults.object(forKey: dateLabel + "setMale") as! [Double]
+            setFemale = userDefaults.object(forKey: dateLabel + "setFemale") as! [Double]
+            setAge = userDefaults.object(forKey: dateLabel + "setAge") as! [[Double]]
+        }else{
+        }
+
+    //合計人数表示
+        total.text = String(totalCount)
+        
+    //v2.0 3600秒ごとにupdate()を呼び出す
+        _ = Timer.scheduledTimer(timeInterval: 3600, target: self, selector: #selector(self.update), userInfo: nil, repeats: true)
+        
+    //v1.1 リセットボタン
         button.setTitle("リセット", for: .normal)
         button.setTitleColor(UIColor.red, for: .normal)
-        
-    //v1.1 アラートコントローラーを作成する。
-        alert = UIAlertController(title: "確認", message: "全てのデータが消去されます。", preferredStyle: UIAlertControllerStyle.alert)
-        
+        //v1.1 アラートコントローラーを作成する。
+        alert = UIAlertController(title: "確認", message: "当日分のデータが消去されます。", preferredStyle: UIAlertControllerStyle.alert)
         //「続けるボタン」のアラートアクションを作成する。
         let alertAction = UIAlertAction(
             title: "リセット",
             style: UIAlertActionStyle.default,
             handler: { action in
                 //リセット処理
-                self.time = 0
-                self.totalCount = 0
-                self.total.text = String(self.totalCount)
-                self.unitsMale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-                self.unitsFemale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-                self.setMale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-                self.setFemale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-                self.setAge = [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]]
-                self.timezone.text = "15-17"
-
+                self.reset()
         })
-        
-        
         //「キャンセルボタン」のアラートアクションを作成する。
         let alertAction2 = UIAlertAction(
             title: "キャンセル",
