@@ -76,6 +76,7 @@ class ViewController: UIViewController {
     @IBAction func tapLabel(_ sender: Any) {
         if unitsSet[time].count > 0{
             unitsSet[time].removeLast()
+            shortVibrate()
             updateCounter()
         }
     }
@@ -211,25 +212,25 @@ class ViewController: UIViewController {
         }
     }
 
-    // 一日のリセット処理
+    // (v2.1 修正) 一日のリセット処理
     @objc func autoReset() {
-        // 現在時刻を取得
-        let nowTime = Int(getNowTime())
-        //5時台にリセット
-        if nowTime! == 5{
-            reset()
+        // 日時を取得
+        getNowDate()
+        // 当日データがある場合、データをロード
+        if  UserDefaults.standard.object(forKey: dateLabel + "unitsSet") != nil {
+            unitsSet = userDefaults.object(forKey: dateLabel + "unitsSet") as! [[Int]]
+            updateCounter()
         }else{
+        // ない場合、リセット
+            reset()
         }
     }
+
    
     //一日のリセット
     func reset(){
         unitsSet = [[], [], [], [], []]
-        getNowDate()
-        updateTime()
-        setChart()
-        countTotal()
-        userDefaults.set(unitsSet, forKey: dateLabel + "unitsSet")
+        updateCounter()
     }
     
     //v1.2 タップ音（バイブレーション）
@@ -251,6 +252,7 @@ class ViewController: UIViewController {
     }
     
 
+
     
 // 起動時の処理
     override func viewDidLoad() {
@@ -258,19 +260,20 @@ class ViewController: UIViewController {
         
     //日付取得
         getNowDate()
-
-    // v2.0 当日データのロード
-        if UserDefaults.standard.object(forKey: dateLabel + "unitsSet") != nil {
-            unitsSet = userDefaults.object(forKey: dateLabel + "unitsSet") as! [[Int]]
-        }else{
-        }
     
-    // カウンターの更新
-        updateCounter()
+    //var2.1 データの更新処理
+        let notificationCenter = NotificationCenter.default
+        //アプリがアクティブになったとき、autoReset()を呼び出す
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(type(of: self).autoReset),
+            name: .UIApplicationDidBecomeActive,
+            object: nil)
         
-    //v2.0 3600秒ごとにautoReset()を呼び出す
+    //v2.0 常時アクティブの際、3600秒ごとにautoReset()を呼び出す
         _ = Timer.scheduledTimer(timeInterval: 3600, target: self, selector: #selector(self.autoReset), userInfo: nil, repeats: true)
         
+
     //v1.1 リセットボタン
         //v1.1 アラートコントローラーを作成する。
         alert = UIAlertController(title: "確認", message: "当日分のデータが消去されます。", preferredStyle: UIAlertControllerStyle.alert)
