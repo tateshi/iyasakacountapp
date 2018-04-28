@@ -345,6 +345,9 @@
                                 <state key="normal" title="性別">
                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                 </state>
+                                <connections>
+                                    <action selector="Sexview:" destination="KFT-M6-m3s" eventType="touchUpInside" id="KcS-cX-2w0"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hJj-sm-adg">
                                 <rect key="frame" x="188" y="45" width="85" height="30"/>
@@ -354,12 +357,37 @@
                                     <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
                                 </state>
                                 <connections>
-                                    <segue destination="FW8-VE-m6D" kind="presentation" identifier="goThird" modalTransitionStyle="flipHorizontal" id="y4g-KF-bVf"/>
+                                    <action selector="Ageview:" destination="KFT-M6-m3s" eventType="touchUpInside" id="QHp-jX-frt"/>
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OjJ-oy-xeK" customClass="BarChartView" customModule="Charts">
-                                <rect key="frame" x="0.0" y="83" width="375" height="515"/>
+                                <rect key="frame" x="0.0" y="73" width="375" height="525"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="fill" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZHa-x3-mgQ">
+                                        <rect key="frame" x="245" y="17" width="122" height="47"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.92143100499999997" green="0.92145264149999995" blue="0.92144101860000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <state key="normal" title="yyyy/mm/dd"/>
+                                        <connections>
+                                            <segue destination="6cQ-iE-Wag" kind="show" identifier="godatepicker" id="ZBM-hr-jsb"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yN4-il-OWs">
+                                        <rect key="frame" x="199" y="17" width="46" height="47"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.92701798680000003" green="0.91823500390000001" blue="0.70874661210000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" title="日計">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <segue destination="ONo-0Y-pLo" kind="show" id="4pC-Xq-OpS"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                         </subviews>
@@ -367,7 +395,10 @@
                         <viewLayoutGuide key="safeArea" id="uTa-Gk-mVC"/>
                     </view>
                     <connections>
+                        <outlet property="chartAge" destination="OjJ-oy-xeK" id="3bT-un-7vK"/>
                         <outlet property="chartSex" destination="OjJ-oy-xeK" id="Uf8-Mx-Z7k"/>
+                        <outlet property="dateLabel" destination="ZHa-x3-mgQ" id="I0A-4E-A5P"/>
+                        <outlet property="term" destination="yN4-il-OWs" id="H6J-eH-aC6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="o67-nK-0G4" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -375,71 +406,93 @@
             </objects>
             <point key="canvasLocation" x="860" y="136.28185907046478"/>
         </scene>
-        <!--Third View Controller-->
-        <scene sceneID="BC1-c5-5fv">
+        <!--Modal View Controller-->
+        <scene sceneID="bbh-l7-hyx">
             <objects>
-                <viewController id="FW8-VE-m6D" customClass="ThirdViewController" customModule="iyasakacountapp" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="T9x-vh-KSf" customClass="View">
+                <viewController modalPresentationStyle="overCurrentContext" id="ONo-0Y-pLo" customClass="ModalViewController" customModule="iyasakacountapp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="MCI-Bj-Y8E">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nez-Js-9ni">
-                                <rect key="frame" x="188" y="606" width="187" height="61"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.95113450290000001" green="0.88111633060000005" blue="0.92960870269999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                <state key="normal" title="結果">
-                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                </state>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yTN-bb-bdk">
-                                <rect key="frame" x="0.0" y="606" width="187" height="61"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.8957787156" green="0.95062762499999998" blue="0.88205045459999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                <state key="normal" title="入力">
-                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                </state>
-                                <connections>
-                                    <segue destination="LDm-xb-dVw" kind="unwind" unwindAction="returnToTopWithSegue:" id="2TC-hC-iwh"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IDw-OV-eKz">
-                                <rect key="frame" x="102" y="45" width="85" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.87281048299999997" green="0.72245448830000003" blue="0.95376402140000005" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <state key="normal" title="性別">
-                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                </state>
-                                <connections>
-                                    <segue destination="LDm-xb-dVw" kind="unwind" unwindAction="returnToSecWithSegue:" id="Xcj-Ey-aec"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rpx-tJ-29p">
-                                <rect key="frame" x="188" y="45" width="85" height="30"/>
+                            <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hXF-kE-ALy">
+                                <rect key="frame" x="0.0" y="252" width="375" height="162"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.80344410211267614" colorSpace="custom" customColorSpace="displayP3"/>
+                            </pickerView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XPy-mX-DAb">
+                                <rect key="frame" x="127" y="452" width="120" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.92701798680000003" green="0.91823500390000001" blue="0.70874661210000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <state key="normal" title="年齢">
-                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="決定">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                             </button>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0WH-RZ-QLv" customClass="BarChartView" customModule="Charts">
-                                <rect key="frame" x="0.0" y="83" width="375" height="515"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <viewLayoutGuide key="safeArea" id="mwt-0l-KZe"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="3VT-9x-A1n"/>
                     </view>
                     <connections>
-                        <outlet property="chartAge" destination="0WH-RZ-QLv" id="Ruy-OW-a75"/>
+                        <outlet property="dismissButton" destination="XPy-mX-DAb" id="QsU-NY-xGC"/>
+                        <outlet property="pickerView" destination="hXF-kE-ALy" id="qdg-BI-aM4"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Md0-pa-ZSB" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="LDm-xb-dVw" userLabel="Exit" sceneMemberID="exit"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xCI-f6-ozk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1570.4000000000001" y="136.28185907046478"/>
+            <point key="canvasLocation" x="1625" y="134"/>
+        </scene>
+        <!--Modal View Controller2-->
+        <scene sceneID="2U3-3q-Ebg">
+            <objects>
+                <viewController storyboardIdentifier="modal2" modalPresentationStyle="overCurrentContext" id="6cQ-iE-Wag" customClass="ModalViewController2" customModule="iyasakacountapp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="1eK-4H-hx4">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="N46-jr-fJF">
+                                <rect key="frame" x="0.0" y="252" width="375" height="162"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <date key="date" timeIntervalSinceReferenceDate="451753449.13817298">
+                                    <!--2015-04-26 15:04:09 +0000-->
+                                </date>
+                                <date key="minimumDate" timeIntervalSinceReferenceDate="546433200">
+                                    <!--2018-04-26 11:00:00 +0000-->
+                                </date>
+                                <locale key="locale" localeIdentifier="ja_JP"/>
+                            </datePicker>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="afq-KG-DTA">
+                                <rect key="frame" x="127" y="452" width="120" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.92701798680000003" green="0.91823500390000001" blue="0.70874661210000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="決定">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="日付を指定" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="luC-Og-4Pm">
+                                <rect key="frame" x="-1.3054187855607324" y="220" width="375" height="32.000000000000114"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.89885390228426398" green="0.89885390228426398" blue="0.89885390228426398" alpha="0.80000000000000004" colorSpace="custom" customColorSpace="displayP3"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="YKr-9K-NE8"/>
+                    </view>
+                    <connections>
+                        <outlet property="datePicker" destination="N46-jr-fJF" id="eWu-2q-Xhn"/>
+                        <outlet property="dismissButton" destination="afq-KG-DTA" id="vR7-hQ-3sP"/>
+                        <outlet property="message" destination="luC-Og-4Pm" id="7IV-Lk-UsS"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Vnm-d8-JOh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1621.5999999999999" y="811.84407796101959"/>
         </scene>
     </scenes>
 </document>

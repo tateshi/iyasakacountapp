@@ -10,7 +10,6 @@ import UIKit
 import AudioToolbox
 
 class ViewController: UIViewController {
-
     
 //変数の定義
     //v2.0 UserDefaults のインスタンス
@@ -21,12 +20,6 @@ class ViewController: UIViewController {
     var time = 0
     //集計用の配列
     var unitsSet:[[Int]] = [[], [], [], [], []]
-    //チャート用の配列
-    //性別
-    var setMale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-    var setFemale = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-    //年齢構成
-    var setAge = [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]]
     //v1.1 アラート
     var alert:UIAlertController!
 
@@ -41,14 +34,8 @@ class ViewController: UIViewController {
     // v1.2 合計・時間帯計切り替え
     @IBAction func counterSwitch(_ sender: Any) {
         if totalLabel.text == "合計"{
-            // 時間帯ごとの人数表示
-            updateTime()
-            totalLabel.text = String(time * 2 + 15) + "-" + String(time * 2 + 17) + "時"
-            total.text = String(unitsSet[time].count)
-
+            countTimeTotal()
         }else{
-            // 合計人数
-            totalLabel.text = "合計"
             countTotal()
         }
     }
@@ -135,9 +122,11 @@ class ViewController: UIViewController {
     //カウンターの更新
     func updateCounter() {
         //合計人数カウンター
-        countTotal()
-        //チャート用の配列に移す
-        setChart()
+        if totalLabel.text == "合計"{
+            countTotal()
+        }else{
+            countTimeTotal()
+        }
         // v2.0 データの保存
         userDefaults.set(unitsSet, forKey: dateLabel + "unitsSet")
     }
@@ -148,22 +137,16 @@ class ViewController: UIViewController {
         for time in 0...4{
             n += unitsSet[time].count
         }
+        totalLabel.text = "合計"
         total.text = String(n)
     }
-    
-    func setChart(){
-        //性別(配列の長さ)
-        for time in 0...4{
-            setMale[time] = Double(unitsSet[time].filter{$0 < 10}.count)
-            setFemale[time] = Double(unitsSet[time].filter{$0 >= 10}.count)
-        //年齢(10の剰余で数える）
-            for i in 0...5{
-                setAge[time][i] = Double(unitsSet[time].filter{$0 % 10 == i}.count)
-            }
-        }
+    //(v2.1修正) 時間帯別人数の計算（戻るに対応）
+    func countTimeTotal(){
+        updateTime()
+        totalLabel.text = String(time * 2 + 15) + "-" + String(time * 2 + 17) + "時"
+        total.text = String(unitsSet[time].count)
     }
-    
-    
+
     //日付取得
     func getNowDate(){
         let calendar = Calendar(identifier: .gregorian)
@@ -226,7 +209,6 @@ class ViewController: UIViewController {
         }
     }
 
-   
     //一日のリセット
     func reset(){
         unitsSet = [[], [], [], [], []]
@@ -304,18 +286,6 @@ class ViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-    
-    //secondへの引き継ぎ
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        if segue.identifier == "goSecond" {
-            let secondVc = segue.destination as! SecondViewController
-            secondVc.setMale = self.setMale
-            secondVc.setFemale = self.setFemale
-            secondVc.setAge = self.setAge
-        }else {
-        }
     }
 
 }
