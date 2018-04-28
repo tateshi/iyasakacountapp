@@ -160,13 +160,13 @@ class ViewController: UIViewController {
         //v2.0 5時台までは前日の日付を使用
         if nowTime! <= 5 {
             //ヘッダー表示用
-            dateFormatter.dateFormat = "M月dd日 EEE曜日"
+            dateFormatter.dateFormat = "M月d日 EEE曜日"
             date.text = dateFormatter.string(from: yesterday!)
             //v2.0 保存ラベル用
             dateFormatter.dateFormat = "yyyyMMdd"
             dateLabel = dateFormatter.string(from: yesterday!)
         }else{
-            dateFormatter.dateFormat = "M月dd日 EEE曜日"
+            dateFormatter.dateFormat = "M月d日 EEE曜日"
             date.text = dateFormatter.string(from: today)
             dateFormatter.dateFormat = "yyyyMMdd"
             dateLabel = dateFormatter.string(from: today)

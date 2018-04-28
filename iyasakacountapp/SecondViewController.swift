@@ -210,7 +210,7 @@ class SecondViewController: UIViewController {
         if key == "label"{
             outFormatter.dateFormat = "yyyyMMdd"
         }else if key == "date"{
-            outFormatter.dateFormat = "yyyy/M/dd"
+            outFormatter.dateFormat = "yyyy/M/d"
         }else if key == "month"{
             outFormatter.dateFormat = "yyyy/M"
         }
@@ -220,7 +220,7 @@ class SecondViewController: UIViewController {
     // 月曜日を探す
     func searchWeek(date:Date) -> Date{
         let calender = NSCalendar(identifier: NSCalendar.Identifier.gregorian)
-        let monday = calender?.nextDate(after: Date(timeInterval: -60*60*24*7, since: Date()) as Date, matching: NSCalendar.Unit.weekday, value: 2, options: NSCalendar.Options.matchNextTime)
+        let monday = calender?.nextDate(after: Date(timeInterval: -60*60*24*7, since: date) as Date, matching: NSCalendar.Unit.weekday, value: 2, options: NSCalendar.Options.matchNextTime)
         return monday!
     }
     

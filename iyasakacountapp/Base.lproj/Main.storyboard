@@ -457,8 +457,8 @@
                                 <date key="date" timeIntervalSinceReferenceDate="451753449.13817298">
                                     <!--2015-04-26 15:04:09 +0000-->
                                 </date>
-                                <date key="minimumDate" timeIntervalSinceReferenceDate="546433200">
-                                    <!--2018-04-26 11:00:00 +0000-->
+                                <date key="minimumDate" timeIntervalSinceReferenceDate="536497200">
+                                    <!--2018-01-01 11:00:00 +0000-->
                                 </date>
                                 <locale key="locale" localeIdentifier="ja_JP"/>
                             </datePicker>
