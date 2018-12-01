@@ -16,7 +16,7 @@ class ViewController: UIViewController {
     let userDefaults = UserDefaults.standard
     //v2.0 保存用の日付フォーマット
     var dateLabel = ""
-    //時間帯（0:15-17 1:17-19 2:19-21 3:21-23 4:23-25）
+    //時間帯（0:11-13 1:13-15 2:15-27 3:17-19 4:19-21）
     var time = 0
     //集計用の配列
     var unitsSet:[[Int]] = [[], [], [], [], []]
@@ -189,8 +189,11 @@ class ViewController: UIViewController {
             time = 4
         }else{
             time = 0
-            while nowTime! >= time * 2 + 17{
+            while nowTime! >= time * 2 + 13{
                 time += 1
+                if time == 4 {
+                    break
+                }
             }
         }
     }

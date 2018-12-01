@@ -11,7 +11,7 @@ import Charts
 
 class SecondViewController: UIViewController {
     
-    let time = ["15-17", "17-19", "19-21", "21-23", "23-25"]
+    let time = ["〜20代", "30代", "40代", "50代", "60代〜", "外国人"]
     
     // チャートUI用の定数
     let groupSpace = 0.4
@@ -268,9 +268,9 @@ class SecondViewController: UIViewController {
         //棒グラフのデータを入れる配列
         var dataEntries: [BarChartDataEntry] = []
         //配列にデータを入れるループ処理
-        for i in 0...4 {
+        for i in 0...5 {
             //stacked barchart
-            let dataEntry = BarChartDataEntry(x: Double(i), yValues:  [self.setAge[i][0],self.setAge[i][1],self.setAge[i][2],self.setAge[i][3],self.setAge[i][4],self.setAge[i][5]])
+            let dataEntry = BarChartDataEntry(x: Double(i), yValues:  [self.setAge[0][i],self.setAge[1][i],self.setAge[2][i],self.setAge[3][i],self.setAge[4][i]])
             dataEntries.append(dataEntry)
         }
         
@@ -278,15 +278,15 @@ class SecondViewController: UIViewController {
         //整数にするためのフォーマッター
         chartDataSet.valueFormatter = BarChartValueFormatter()
         //チャートの配色・ラベル
-        chartDataSet.colors = [UIColor(red: 255/255, green: 255/255, blue: 127/255, alpha: 1),UIColor(red: 127/255, green: 255/255, blue: 191/255, alpha: 1),UIColor(red: 127/255, green: 191/255, blue: 255/255, alpha: 1),UIColor(red: 191/255, green: 127/255, blue: 255/255, alpha: 1),UIColor(red: 255/255, green: 127/255, blue: 191/255, alpha: 1),UIColor(red: 255/255, green: 127/255, blue: 127/255, alpha: 1)]
-        chartDataSet.stackLabels = ["〜小学生", "中学生","16〜24","25〜39","40〜59","60〜"]
+        chartDataSet.colors = [UIColor(red: 255/255, green: 255/255, blue: 127/255, alpha: 1),UIColor(red: 127/255, green: 255/255, blue: 191/255, alpha: 1),UIColor(red: 127/255, green: 191/255, blue: 255/255, alpha: 1),UIColor(red: 191/255, green: 127/255, blue: 255/255, alpha: 1),UIColor(red: 255/255, green: 127/255, blue: 191/255, alpha: 1)]
+        chartDataSet.stackLabels = ["11-13", "13-15","15-17","17-19","19-21"]
         
         //グラフのUI
         let chartData = BarChartData(dataSet: chartDataSet)
         chartData.barWidth = barWidth;
         let gg = chartData.groupWidth(groupSpace: groupSpace, barSpace: barSpace)
         print("Groupspace: \(gg)")
-        chartAge.xAxis.axisMaximum = Double(startYear) + gg * Double(groupCount)
+        chartAge.xAxis.axisMaximum = Double(startYear) + gg * Double(6)
         chartData.groupBars(fromX: Double(startYear), groupSpace: groupSpace, barSpace: barSpace)
         chartAge.data = chartData
         //chart animation
