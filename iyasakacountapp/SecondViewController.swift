@@ -11,7 +11,8 @@ import Charts
 
 class SecondViewController: UIViewController {
     
-    let time = ["〜20代", "30代", "40代", "50代", "60代〜", "外国人"]
+    let age = ["〜20代", "30代", "40代", "50代", "60代〜", "外国人"]
+    let time = ["11-13", "13-15", "15-17", "17-19", "19-21"]
     
     // チャートUI用の定数
     let groupSpace = 0.4
@@ -263,6 +264,9 @@ class SecondViewController: UIViewController {
     
 // 年齢チャート
     func setChart2() {
+        let xaxis = chartSex.xAxis
+        xaxis.valueFormatter = IndexAxisValueFormatter(values:self.age)
+        
         chartSex.chartDescription?.text = "年齢"
         
         //棒グラフのデータを入れる配列
